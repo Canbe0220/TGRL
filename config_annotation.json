@@ -1,0 +1,63 @@
+{
+  "env_paras": {
+    "num_jobs": "Number of jobs during training; test dimensions are read from each instance.",
+    "num_mas": "TOTAL number of machines across all factories.",
+    "num_fac": "Number of factories.",
+    "batch_size": "Number of parallel training instances.",
+    "ope_feat_dim": "Keep 6: legacy environment operation features. TRG constructs 8 inputs internally.",
+    "ma_feat_dim": "Keep 4: legacy environment machine features. TRG constructs 6 inputs internally.",
+    "pair_feat_dim": "Keep 4: raw environment pair features. TRG constructs separate 8D tgrl_pair features and 8D successor-edge features internally.",
+    "show_mode": "print by default; draw enables optional matplotlib visualization.",
+    "valid_batch_size": "Number of validation instances; enough files must exist."
+  },
+  "model_paras": {
+    "hidden_dim": "Shared graph embedding width; divisible by attention_heads.",
+    "attention_heads": "Number of attention heads for eligibility, suffix and successor relations.",
+    "graph_layers": "Number of relational layers and action-factor layers.",
+    "n_latent_actor": "Actor MLP hidden width.",
+    "n_latent_critic": "Value and action-critic MLP hidden width.",
+    "n_hidden_actor": "Number of actor linear layers.",
+    "n_hidden_critic": "Number of critic linear layers.",
+    "use_timetable_graph": "Enable timetable suffix DP, catchability edges, phase features and departure factors.",
+    "store_rollout_on_cpu": "Store compact graph snapshots on CPU; transfer minibatches for updates."
+  },
+  "train_paras": {
+    "lr": "Adam learning rate.",
+    "betas": "Adam moment coefficients.",
+    "gamma": "Discount factor; keep 1.0 for the telescoping makespan objective.",
+    "K_epochs": "PPO epochs per complete-rollout update.",
+    "eps_clip": "PPO ratio clip radius.",
+    "A_coeff": "Actor objective coefficient.",
+    "vf_coeff": "State-value MSE coefficient.",
+    "entropy_coeff": "Entropy coefficient; entropy is divided by log(max(number of feasible actions,2)).",
+    "max_iterations": "Number of training episodes, each containing batch_size parallel instances.",
+    "save_timestep": "Validate every this many iterations; always validate the final iteration.",
+    "update_timestep": "Accumulate complete episodes for this many iterations before PPO update.",
+    "viz": "Enable optional Visdom, disabled by default.",
+    "viz_name": "Visdom environment name.",
+    "minibatch_size": "Number of REAL state-action transitions per optimizer step.",
+    "parallel_iter": "Regenerate training instances every this many iterations.",
+    "gae_lambda": "GAE lambda.",
+    "q_coeff": "Sampled graph-action critic Smooth-L1 coefficient.",
+    "cf_coeff": "Final GCO graph control-variate coefficient (PPO-based optimization). Set cf_coeff=q_coeff=0 for ordinary PPO ablation.",
+    "cf_warmup_updates": "Linear ramp length for the control-variate coefficient.",
+    "target_kl": "Exact old-to-new KL target; stop at 1.5 times this value. Zero disables stopping.",
+    "max_grad_norm": "Gradient clipping threshold.",
+    "seed": "Python, NumPy and PyTorch random seed. Use independent seeds for experiments.",
+    "device": "auto, cpu, cuda:0, cuda:1, etc.",
+    "cpu_threads": "CPU PyTorch threads.",
+    "check_feasibility": "Check every training schedule. Validation/test schedules are always checked."
+  },
+  "test_paras": {
+    "num_ins": "Maximum number of sorted .fjs test instances.",
+    "rules": "Use [\"TGRL\"] to scan *.pt in model_dir (legacy DRL/CALM selectors also work); otherwise list exact .pt filenames.",
+    "sample": "False: greedy. True: sample independent complete trajectories and choose the best.",
+    "num_sample": "Number of independent trajectories per instance when sampling.",
+    "num_average": "Repeat inference; report mean score and time across repetitions.",
+    "public_ins": "Legacy compatibility field; unused by the new test entry point.",
+    "data_path": "Subdirectory of data_test, e.g. 100502 or Public_02; J/M/F are read from each file.",
+    "model_dir": "Directory of TGRL .pt policy state dictionaries matching model_paras and the 8D pair input.",
+    "device": "auto, cpu, cuda:0, cuda:1, etc.",
+    "seed": "Python, NumPy and PyTorch random seed. Use independent seeds for experiments."
+  }
+}
