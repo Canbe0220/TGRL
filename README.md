@@ -68,23 +68,11 @@ python PDRs.py --data-dirs data_test/100502 --output-dir PDRs
 python OR-Tools.py --data-dirs data_test/100502 --time-limit 1800 --workers 8 --output-dir optimal
 ```
 
-The default evaluation uses **all 130 instances in `Public_02` with best-of-100 sampling**. Set `test_paras.sample=false` for greedy decoding; `num_sample` controls the sampling budget and `num_average` controls repeated evaluations. Test dimensions are read from each file. `num_ins` limits the sorted file list, so use 100 for a complete synthetic test folder and 130 for the public folder.
-
-The bundled checkpoint is `model/save_best_10_5_2_890.pt`. `rules=["TGRL"]` evaluates every `.pt` file in `model_dir`; alternatively list exact filenames. Set `model_dir` to a training output directory to evaluate a new model. Checkpoints must match `model_paras` and the 8D pair input; older 20D-pair checkpoints are incompatible.
-
-Evaluation writes per-instance `makespan.xlsx` and `time.xlsx` under `save/test_.../`. Times cover graph construction, policy inference, and environment transitions, excluding initialization and feasibility checks. Sampling time covers the complete sampling budget. Public benchmark groups are identified by filename prefixes `Mk`, `r_`, `e_`, and `v_`; report their means separately. The paper's gap is `(mean_method - mean_CP-SAT) / mean_CP-SAT * 100`, rather than the mean of instance-wise gaps.
-
-PDRs include FIFO-T, SPT-T, MOR-T, and MWKR-T. SPT-T minimizes the current reservation duration, while MOR-T prioritizes remaining-operation counts. CP-SAT uses the same reservation and timetable rules with non-delay dispatching and a default solver limit of **1800 seconds per instance**. Both baselines validate schedules and export CSV results. CP-SAT's `relative_gap` output is its solver optimality gap, not the paper's comparison gap. The optional `--allow-idle` mode solves a broader scheduling problem and saves results separately. Only `OPTIMAL` certifies optimality; fallback results are explicitly labeled.
-
-## Repository Guide
-
-- `DRL.py`, `transport_graph.py`, `embedding.py`: policy, GCO optimization, TRG construction, and graph encoding.
-- `env/`: synthetic generation, instance parsing, and the batched scheduling environment.
-- `train.py`, `validate.py`, `test.py`: training, validation, and evaluation entry points.
-- `dfjsp_common.py`, `PDRs.py`, `OR-Tools.py`: shared baseline utilities and solvers.
-- `config.json`, `config_annotation.json`: active settings and their descriptions.
-- `case.py`, `data_create.py`: optional dataset preparation; `mlp.py` and `utils/` retain supporting components.
-
 ## References
+This repository builds on the following open-source implementations:
 
-This implementation builds on [fjsp-drl](https://github.com/songwenas12/fjsp-drl), [L2D](https://github.com/zcaicaros/L2D), and [MatNet](https://github.com/yd-kwon/MatNet). See `LICENSE` for the Apache License 2.0 terms.
+- https://github.com/XiangjieXiao/ReSched
+- https://github.com/wrqccc/FJSP-DRL
+- https://github.com/songwenas12/fjsp-drl
+- https://github.com/zcaicaros/L2D
+- https://github.com/google/or-tools
